@@ -21,7 +21,7 @@ require(cluster)
 #install.packages("dplyr")
 require(dplyr)
 
-source("../../biostats.R") #Biostats analysis wrapper
+source("biostats.R") #Biostats analysis wrapper
 ```
 
 # Obtain session information
@@ -55,7 +55,7 @@ For the environmental data, I want my rownames to be oyster samples, and my colu
 ### Import and reformat environmental data
 
 ```{r}
-dailyMeanData <- read.csv("../../2017-11-15-Environmental-Data-and-Biomarker-Analyses/2017-12-13-Environmental-Data-Quality-Control/2018-12-01-Mean-Environmental-Data-Log-Transformed.csv", header = TRUE) #Import mean data
+dailyMeanData <- read.csv("2017-12-13-Environmental-Data-Quality-Control/2018-12-01-Mean-Environmental-Data-Log-Transformed.csv", header = TRUE) #Import mean data
 rownames(dailyMeanData) <- dailyMeanData[,1] #Set first column as row names
 dailyMeanData <- dailyMeanData[,-1] #Remove first column
 head(dailyMeanData)
@@ -66,7 +66,7 @@ collectionMeanData <- dailyMeanData$X2016.07.19 #Subset data from collection dat
 ```
 
 ```{r}
-dailyVarianceData <- read.csv("../../2017-11-15-Environmental-Data-and-Biomarker-Analyses/2017-12-13-Environmental-Data-Quality-Control/2018-12-01-Variance-Environmental-Data-Log-Transformed.csv", header = TRUE) #Import mean data
+dailyVarianceData <- read.csv("2017-12-13-Environmental-Data-Quality-Control/2018-12-01-Variance-Environmental-Data-Log-Transformed.csv", header = TRUE) #Import mean data
 rownames(dailyVarianceData) <- dailyVarianceData[,1] #Set first column as row names
 dailyVarianceData <- dailyVarianceData[,-1] #Remove first column
 head(dailyVarianceData)
@@ -130,7 +130,7 @@ collectionTemperature <- environmentalData[grep(rownames(environmentalData), pat
 ### Combine oyster samples with environmental data
 
 ```{r}
-biologicalReplicates <- read.csv("../../2017-09-06-Biological-Replicate-Information.csv", header = TRUE) #Import biological replciate information
+biologicalReplicates <- read.csv("../../data/2017-09-06-Biological-Replicate-Information.csv", header = TRUE) #Import biological replciate information
 head(biologicalReplicates) #Confirm import
 ```
 
@@ -419,20 +419,3 @@ points(protEnvRDA, choices = c(1,2), display = 'wa', pch = NMDSColorShapeCustomi
 points(protEnvRDA, choices = c(1,2), display = 'sp', pch = 22, col = 'grey20', bg = "grey20", cex = 0.5, scaling = 2) #Plot descriptors as text
 text(protEnvRDA, choices = c(1,2), display = 'bp', col = 'grey20', cex = 0.75) #Plot only marginally significant predictors
 ```
-
-### Only significant proteins and predictors
-
-```{r}
-plot(protEnvRDA, choices=c(1,2), type = 'none', scaling = 2, xlab = "", ylab = "", xaxt = "n", yaxt = "n") #Create an empty plot based on RDA dimensions
-points(protEnvRDA, choices = c(1,2), display = 'wa', pch = NMDSColorShapeCustomization$Shape, cex = 1, scaling = 2, col = NMDSColorShapeCustomization$Color) #Plot objects as points
-points(protEnvRDA, choices = c(1,2), display = 'sp', col = 'grey20', pch = 4, cex = 1, scaling = 2, select = c(5, 12, 13, 19, 22, 30, 33)) #Plot significant proteins
-text(protEnvRDA, choices = c(1,2), display = 'bp', col = 'grey20', cex = 0.75, select = 1:2) #Plot only marginally significant predictors
-axis(side = 1, labels = TRUE, col = "grey80", cex.axis = 0.75)
-mtext(side = 1, text = "RDA1", line = 2)
-axis(side = 2, labels = TRUE, col = "grey80", cex.axis = 0.75)
-mtext(side = 2, text = "RDA2", line = 2)
-box(col = "grey80")
-
-legend("topleft", pch = c(rep(x = 1, times = 6), 16), legend=c('Case Inlet', "Fidalgo Bay", "Willapa Bay", "Skokomish", "Port Gamble", "Bare", "Eelgrass"), col=c('#00A9BD', '#38001C', '#440D82', '#017A74', '#EB8B0C', 'black', 'black'), cex = 0.5, bty = "n")
-```
-

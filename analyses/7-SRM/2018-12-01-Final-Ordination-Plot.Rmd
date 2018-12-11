@@ -21,7 +21,7 @@ require(cluster)
 #install.packages("dplyr")
 require(dplyr)
 
-source("../../biostats.R") #Biostats analysis wrapper
+source("biostats.R") #Biostats analysis wrapper
 ```
 
 # Obtain session information
@@ -50,7 +50,7 @@ head(proteinAbundanceHT) #Confirm transformation
 ## Mean environmental data (NMDS)
 
 ```{r}
-meanData.log.trans <- read.csv("../../2017-11-15-Environmental-Data-and-Biomarker-Analyses/2017-12-13-Environmental-Data-Quality-Control/2018-12-01-Mean-Environmental-Data-Log-Transformed.csv", header = TRUE) #Import daily means
+meanData.log.trans <- read.csv("2017-12-13-Environmental-Data-Quality-Control/2018-12-01-Mean-Environmental-Data-Log-Transformed.csv", header = TRUE) #Import daily means
 rownames(meanData.log.trans) <- meanData.log.trans[,1] #Assign first column as rownames
 meanData.log.trans <- meanData.log.trans[,-1] #Remove first column
 colnames(meanData.log.trans) <- gsub("^X", "",  colnames(meanData.log.trans)) #Remove "X" from column names
@@ -65,7 +65,7 @@ meanDataGowerDiss #Confirm matrix calculation
 ## Variance environmental data (NMDS)
 
 ```{r}
-varData.log.trans <- read.csv("../../2017-11-15-Environmental-Data-and-Biomarker-Analyses/2017-12-13-Environmental-Data-Quality-Control/2018-12-01-Variance-Environmental-Data-Log-Transformed.csv", header = TRUE) #Import daily variances
+varData.log.trans <- read.csv("2017-12-13-Environmental-Data-Quality-Control/2018-12-01-Variance-Environmental-Data-Log-Transformed.csv", header = TRUE) #Import daily variances
 rownames(varData.log.trans) <- varData.log.trans[,1] #Assign first column as rownames
 varData.log.trans <- varData.log.trans[,-1] #Remove first column
 colnames(varData.log.trans) <- gsub("^X", "",  colnames(varData.log.trans)) #Remove "X" from column names
@@ -149,7 +149,7 @@ protEnvRDA <- rda(proteinAbundanceHT~., environmentalSampleData.log, na.action =
 ### Import biological data
 
 ```{r}
-biologicalReplicates <- read.csv("../../2017-09-06-Biological-Replicate-Information.csv", header = TRUE) #Import biological replciate information
+biologicalReplicates <- read.csv("../../data/2017-09-06-Biological-Replicate-Information.csv", header = TRUE) #Import biological replciate information
 biologicalReplicates$Sample.Number <- as.character(biologicalReplicates$Sample.Number) #Convert sample number to character string
 biologicalReplicates$Sample.Number <- substr(biologicalReplicates$Sample.Number, 1, nchar(biologicalReplicates$Sample.Number)-2) #Remove -1 or -2 from end of sample number
 biologicalReplicates <- biologicalReplicates[1:49,] #Keep only the first 50 rows, since everything repeats. Also eliminate OBLNK2
@@ -337,11 +337,11 @@ mtext(side = 1, text = "NMDS1", line = 2)
 axis(side = 2, labels = TRUE, col = "grey80", cex.axis = 0.75)
 mtext(side = 2, text = "NMDS2", line = 2)
 
-#ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show.groups = "CI", col = "#00A9BD88") #Add confidence ellipse around the oyster samples from Case Inlet
-#ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show.groups = "FB", col = "#38001C88") #Add confidence ellipse around the oyster samples from Fidalgo Bay
-#ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show.groups = "PG", col = "#440D8288") #Add confidence ellipse around the oyster samples from Port Gamble Bay
-#ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show.groups = "SK", col = "#017A7488") #Add confidence ellipse around the oyster samples from Skokomish River Delta
-#ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show.groups = "WB", col = "#EB8B0C88") #Add confidence ellipse around the oyster samples from Willapa Bay
+ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show.groups = "CI", col = "#00A9BD88") #Add confidence ellipse around the oyster samples from Case Inlet
+ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show.groups = "FB", col = "#38001C88") #Add confidence ellipse around the oyster samples from Fidalgo Bay
+ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show.groups = "PG", col = "#440D8288") #Add confidence ellipse around the oyster samples from Port Gamble Bay
+ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show.groups = "SK", col = "#017A7488") #Add confidence ellipse around the oyster samples from Skokomish River Delta
+ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show.groups = "WB", col = "#EB8B0C88") #Add confidence ellipse around the oyster samples from Willapa Bay
 
 legend("topleft", pch = c(rep(x = 1, times = 6), 16), legend=c('Case Inlet', "Fidalgo Bay", "Willapa Bay", "Skokomish", "Port Gamble", "Bare", "Eelgrass"), col=c('#00A9BD', '#38001C', '#440D82', '#017A74', '#EB8B0C', 'black', 'black'), cex = 0.5, bty = "n")
 ```

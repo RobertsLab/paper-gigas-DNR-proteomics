@@ -19,7 +19,7 @@ require(vegan)
 #install.packages("cluster")
 require(cluster)
 
-source("../../biostats.R") #Load biostats file
+source("../biostats.R") #Load biostats file
 ```
 
 ```{r}
@@ -31,7 +31,7 @@ sessionInfo()
 ## Tide data
 
 ```{r}
-tideData <- read.csv("../../../../data/DNR/2017-12-13-Tidal-Data-by-Site.csv", header = TRUE, strip.white = TRUE) #Import the tide data
+tideData <- read.csv("../../../data/2017-12-13-Tidal-Data-by-Site.csv", header = TRUE, strip.white = TRUE) #Import the tide data
 tideData$Date <- as.Date(tideData$Date, format = "%m/%d/%y") #Convert entries to dates
 tideData$DateTime <- paste(tideData$Date, tideData$Time) #Create new DateTime column to easily merge tide and environmental data
 colnames(tideData) <- c("Date", "Time", "CI-Tide", "FB-Tide", "PG-Tide", "SK-Tide", "WB-Tide", "DateTime")
@@ -41,7 +41,7 @@ head(tideData) #Confirm changes
 ## pH data
 
 ```{r}
-pHDOData <- read.csv("../../../../data/DNR/2017-11-14-Environmental-Data-from-Micah.csv", header = TRUE, na.strings = "NA") #Import file with pH and DO data
+pHDOData <- read.csv("../../../data/2017-11-14-Environmental-Data-from-Micah.csv", header = TRUE, na.strings = "NA") #Import file with pH and DO data
 colnames(pHDOData) #View column names
 ```
 
@@ -76,7 +76,7 @@ head(DOData) #Confirm changes
 ## Salinity
 
 ```{r}
-salinityData <- read.csv("../../../../data/DNR/2018-05-30-Fixed-Salinity-from-Micah.csv", header = TRUE, na.strings = "NA", strip.white = TRUE) #Import salinity data and remove white space from end of Date and Time columns
+salinityData <- read.csv("../../../data/2018-05-30-Fixed-Salinity-from-Micah.csv", header = TRUE, na.strings = "NA", strip.white = TRUE) #Import salinity data and remove white space from end of Date and Time columns
 salinityData <- salinityData[,c(1:2, 4, 6, 8, 10, 12, 14, 16, 20)] #Subset salinity from bare and eelgrass outplants. Needed to use PGE instead of PGB since PGB has no salinity data. Also use FBE and WBE due to probe burial at bare sites.
 head(salinityData) #Confirm subset
 ```
@@ -92,7 +92,7 @@ head(salinityData)
 ## Temperature data
 
 ```{r}
-temperatureData <- read.csv("../../../../data/DNR/2017-11-14-Environmental-Data-from-Micah.csv", header = TRUE, na.strings = "NA") #Import temperature data
+temperatureData <- read.csv("../../../data/2017-11-14-Environmental-Data-from-Micah.csv", header = TRUE, na.strings = "NA") #Import temperature data
 colnames(temperatureData) #Get column names
 ```
 

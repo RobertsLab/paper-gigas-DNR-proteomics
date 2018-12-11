@@ -2,14 +2,14 @@
 
 #### IMPORT AND FORMAT DATA ####
 
-tideData <- read.csv("data/DNR/2017-12-13-Tidal-Data-by-Site.csv", header = TRUE, strip.white = TRUE) #Import the tide data
+tideData <- read.csv("data/2017-12-13-Tidal-Data-by-Site.csv", header = TRUE, strip.white = TRUE) #Import the tide data
 head(tideData) #Confirm import
 tideData$Date <- as.Date(tideData$Date, format = "%m/%d/%y") #Convert entries to dates
 tideData$DateTime <- paste(tideData$Date, tideData$Time) #Create new DateTime column to easily merge tide and environmental data
 colnames(tideData) <- c("Date", "Time", "CI-Tide", "FB-Tide", "PG-Tide", "SK-Tide", "WB-Tide", "DateTime")
 head(tideData) #Confirm changes
 
-pHDOData <- read.csv("data/DNR/2017-11-14-Environmental-Data-from-Micah.csv", header = TRUE, na.strings = "NA") #Import file with pH and DO data
+pHDOData <- read.csv("data/2017-11-14-Environmental-Data-from-Micah.csv", header = TRUE, na.strings = "NA") #Import file with pH and DO data
 head(pHDOData) #Confirm import
 colnames(pHDOData) #View column names
 
@@ -27,7 +27,7 @@ DOData$Date <- as.Date(DOData$Date, format = "%m/%d/%y") #Convert entries to dat
 DOData$DateTime <- paste(DOData$Date, DOData$Time) #Create new DateTime column to easily merge tide and environmental data
 head(DOData) #Confirm changes
 
-salinityData <- read.csv("data/DNR/2018-05-30-Fixed-Salinity-from-Micah.csv", header = TRUE, na.strings = "NA", strip.white = TRUE) #Import salinity data and remove white space from end of Date and Time columns
+salinityData <- read.csv("data/2018-05-30-Fixed-Salinity-from-Micah.csv", header = TRUE, na.strings = "NA", strip.white = TRUE) #Import salinity data and remove white space from end of Date and Time columns
 head(salinityData) #Confirm import
 colnames(salinityData) #Get column names
 salinityData <- salinityData[,c(1:2, 4, 10, 12, 14, 20)] #Subset only the salinity information from bare outplants. Needed to use PGE instead of PGB since PGB has no salinity data. Also use FBE and WBE due to probe burial at bare sites.
@@ -157,6 +157,6 @@ for(i in 4:nSites) { #For individual site data
 
 #### WRITE OUT AS NEW DATAFRAMES ####
 
-#write.csv(pHTideData, "2017-11-15-Environmental-Data-and-Biomarker-Analyses/2017-12-13-Environmental-Data-Quality3-Control/2017-12-18-pH-Data-QC-with-Tide-Data.csv") #pH
-#write.csv(DOTideData, "2017-11-15-Environmental-Data-and-Biomarker-Analyses/2017-12-13-Environmental-Data-Quality-Control/2017-12-18-DO-Data-QC-with-Tide-Data.csv") #DO
-#write.csv(salinityTideData, "2017-11-15-Environmental-Data-and-Biomarker-Analyses/2017-12-13-Environmental-Data-Quality-Control/2017-12-18-Salinity-Data-QC-with-Tide-Data.csv") #Salinity
+#write.csv(pHTideData, "analyses/7-SRM/2017-12-13-Environmental-Data-Quality-Control/2017-12-18-pH-Data-QC-with-Tide-Data.csv") #pH
+#write.csv(DOTideData, "analyses/7-SRM/2017-12-13-Environmental-Data-Quality-Control/2017-12-18-DO-Data-QC-with-Tide-Data.csv") #DO
+#write.csv(salinityTideData, "analyses/7-SRM/2017-12-13-Environmental-Data-Quality-Control/2017-12-18-Salinity-Data-QC-with-Tide-Data.csv") #Salinity

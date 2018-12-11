@@ -2,21 +2,18 @@
 
 #### LOAD DEPENDENCIES ####
 
-source("analyses/DNR_SRM_20170902/biostats.R") #Load the source file for the biostats commands
+source("analyses/7-SRM/biostats.R") #Load the source file for the biostats commands
 #install.packages("vegan") #Install vegan package
 require(vegan)
 
 #### IMPORT DATA ####
 
-SRMDataNMDSPivotedCorrected <- read.csv("analyses/DNR_SRM_20170902/2017-10-10-Troubleshooting/2017-11-05-Integrated-Dataset/2017-11-05-Technical-Replicates-Pivoted.csv")
+SRMDataNMDSPivotedCorrected <- read.csv("analyses/7-SRM/2017-11-05-Technical-Replicates-Pivoted.csv")
 rownames(SRMDataNMDSPivotedCorrected) <- SRMDataNMDSPivotedCorrected$X #Set row names
 SRMDataNMDSPivotedCorrected <- SRMDataNMDSPivotedCorrected[,-1] #Remove column of row names
 head(SRMDataNMDSPivotedCorrected) #Confirm there are no NAs
 
 sampleColumnNames <- c("O01", "O04", "O08", "O10", "O100", "O101", "O102", "O106", "O118", "O121", "O124", "O131", "O137", "O140", "O147", "O17", "O21", "O22", "O24", "O26", "O30", "O31", "O32", "O35", "O40", "O43", "O46", "O51", "O56", "O60", "O64", "O66", "O78", "O90", "O91", "O96", "O99") #Create a sample ID vector
-biologicalReplicates <- read.csv("analyses/DNR_SRM_20170902/2017-10-10-Troubleshooting/2017-10-24-Coefficient-of-Variation/2017-10-25-Biological-Replicate-Information-SampleID-Only.csv", header = TRUE) #Import biological replicate information
-colnames(biologicalReplicates) <- c("Sample.Number", "Site", "Eelgrass.Condition") #Rename columns
-head(biologicalReplicates) #Confirm import
 
 #### AVERAGE TECHNICAL REPLICATES ####
 
@@ -40,10 +37,8 @@ head(SRMDataNMDSAveraged) #Confirm column naming
 #### TRANSFORM DATA ####
 
 SRMDataNMDSAveragedCorrected <- SRMDataNMDSAveraged #Duplicate dataframe
-#write.csv(SRMDataNMDSAveragedCorrected, "analyses/DNR_SRM_20170902/2017-10-10-Troubleshooting/2017-11-05-Integrated-Dataset/2018-11-27-Averaged-Areas-Pivoted-NAs.csv") #Wrote out dataframe with NAs
 SRMDataNMDSAveragedCorrected[is.na(SRMDataNMDSAveragedCorrected)] <- 0 #Replace NAs with 0s
 head(SRMDataNMDSAveragedCorrected) #Confirm there are no NAs
-#write.csv(SRMDataNMDSAveragedCorrected, "2017-10-10-Troubleshooting/2017-11-05-Integrated-Dataset/2017-11-05-Averaged-Areas-Pivoted-Corrected.csv") #Wrote out dataframe
 
 area.protID4 <- SRMDataNMDSAveragedCorrected #Save all area data as a new dataframe
 head(area.protID4) #Confirm changes
@@ -71,7 +66,7 @@ plot(vec.proc.nmds.averaged.euclidean, p.max = 0.001, col = 'blue') #Plot loadin
 
 #### IMPORT AND FORMAT BIOLOGICAL DATA ####
 
-biologicalReplicates <- read.csv("analyses/DNR_SRM_20170902/2017-09-06-Biological-Replicate-Information.csv", na.strings = "N/A", fileEncoding="UTF-8-BOM") #Import site and eelgrass condition information (i.e. biological replicate information), using specific file encoding information
+biologicalReplicates <- read.csv("data/2017-09-06-Biological-Replicate-Information.csv", na.strings = "N/A", fileEncoding="UTF-8-BOM") #Import site and eelgrass condition information (i.e. biological replicate information), using specific file encoding information
 head(biologicalReplicates) #Confirm import
 biologicalReplicates$Sample.Number <- as.character(biologicalReplicates$Sample.Number) #Convert sample number to character string
 biologicalReplicates$Sample.Number <- substr(biologicalReplicates$Sample.Number, 1, nchar(biologicalReplicates$Sample.Number)-2) #Remove -1 or -2 from end of sample number
@@ -132,7 +127,6 @@ tail(NMDSColorShapeCustomization) #Confirm changes
 
 #### NMDS BY SITE WITH CONFIDENCE ELLIPSE ####
 
-#pdf("analyses/DNR_SRM_20170902/2017-10-10-Troubleshooting/2017-11-05-Integrated-Dataset/2018-11-28-Protein-Abundance-NMDS-Ellipse.pdf", width = 11, height = 8.5)
 fig.nmds <- ordiplot(proc.nmds.averaged.euclidean, choices = c(1,2), type = "none", display = "sites", xlab = "Axis 1", ylab = "Axis 2", cex = 0.5) #Save NMDS as a new object
 text(fig.nmds, "sites", col = NMDSColorShapeCustomization$Color) #Add oyster sample IDs to NMDS and color-code by site distinction
 
@@ -143,7 +137,6 @@ ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show
 ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show.groups = "WB", col = "#EB8B0C") #Add confidence ellipse around the oyster samples from Willapa Bay
 
 legend("topright", pch = rep(x = 16, times = 5), legend=c('Case Inlet', "Fidalgo Bay", "Port Gamble Bay", "Skokomish", "Willapa Bay"), col = c('#00A9BD', '#38001C', '#440D82', '#017A74', '#EB8B0C'), cex = 0.5, bty = "n")
-#dev.off()
 
 #### NMDS BY SITE WITH POLYGONS ####
 
@@ -167,7 +160,6 @@ legend("topright", pch = rep(x = 16, times = 5), legend=c('Case Inlet', "Fidalgo
 
 #### NMDS BY HABITAT WITH CONFIDENCE ELLIPSES ####
 
-#jpeg(filename = "2017-10-10-Troubleshooting/2017-11-05-Integrated-Dataset/2018-05-23-NMDS-Analysis-Averaged-HabitatOnly.jpeg", width = 1000, height = 750)
 fig.nmds <- ordiplot(proc.nmds.averaged.euclidean, choices=c(1,2), type = "none", display = "sites", xlab = "Axis 1", ylab = "Axis 2", cex = 0.5) #Save NMDS as a new object
 
 #Legend for NMDS plot:
@@ -178,11 +170,9 @@ points(fig.nmds, "sites", col = "black", pch = NMDSColorShapeCustomization$Shape
 ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Eelgrass.Condition, show.groups = "Eelgrass", col = "green") #Add confidence ellipse around the oyster samples from eelgrass habitats
 ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Eelgrass.Condition, show.groups = "Bare", col = "black") #Add confidence ellipse around the oyster samples from bare habitats
 legend("topright", pch = c(16, 17), legend=c("Bare", "Eelgrass"), col=c("black", "green"), cex = 1)
-#dev.off()
 
 #### NMDS BY HABITAT WITH POLYGONS ####
 
-#jpeg(filename = "2017-10-10-Troubleshooting/2017-11-05-Integrated-Dataset/2018-05-23-NMDS-Analysis-Averaged-HabitatOnly.jpeg", width = 1000, height = 750)
 fig.nmds <- ordiplot(proc.nmds.averaged.euclidean, choices=c(1,2), type = "none", display = "sites", xlab = "Axis 1", ylab = "Axis 2", cex = 0.5) #Save NMDS as a new object
 
 #Legend for NMDS plot:
@@ -193,11 +183,9 @@ points(fig.nmds, "sites", col = "black", pch = NMDSColorShapeCustomization$Shape
 ordihull(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Eelgrass.Condition, show.groups = "Eelgrass", col = "green") #Add confidence ellipse around the oyster samples from eelgrass habitats
 ordihull(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Eelgrass.Condition, show.groups = "Bare", col = "black") #Add confidence ellipse around the oyster samples from bare habitats
 legend("topright", pch = c(16, 17), legend=c("Bare", "Eelgrass"), col=c("black", "green"), cex = 1)
-#dev.off()
 
 #### NMDS BY SITE AND HABITAT WITH CONFIDENCE ELLIPSE ####
 
-#pdf("analyses/DNR_SRM_20170902/2017-10-10-Troubleshooting/2017-11-05-Integrated-Dataset/2018-11-28-Protein-Abundance-Site-Habitat-NMDS-Ellipse.pdf", width = 11, height = 8.5)
 fig.nmds <- ordiplot(proc.nmds.averaged.euclidean, choices=c(1,2), type = "none", display = "sites", xlab = "", ylab = "", cex = 0.5, xaxt = "n", yaxt = "n") #Save NMDS as a new object
 points(fig.nmds, "sites", col = NMDSColorShapeCustomization$Color, pch = NMDSColorShapeCustomization$Shape)
 axis(side = 1, labels = TRUE, col = "grey80", cex.axis = 0.75)
@@ -214,12 +202,7 @@ ordiellipse(proc.nmds.averaged.euclidean, NMDSColorShapeCustomization$Site, show
 
 legend("topleft", pch = c(rep(x = 1, times = 6), 16), legend=c('Case Inlet', "Fidalgo Bay", "Willapa Bay", "Skokomish", "Port Gamble", "Bare", "Eelgrass"), col=c('#00A9BD', '#38001C', '#440D82', '#017A74', '#EB8B0C', 'black', 'black'), cex = 0.5, bty = "n")
 
-#dev.off()
-
 #### PLOT JUST THE LOADINGS ####
-
-sigLoadings <- envfit(proc.nmds.averaged.euclidean$points, area4.tra[,c(5, 12:13, 19, 22, 30, 33)], perm = 1000, na.rm = TRUE) #Only calculate loadings simper identified as driving differences between FB-WB and SK-WB. See ANOSIM section for simper results.
-sigLoadings #View loadings
 
 ordiplot(proc.nmds.averaged.euclidean, choices = c(1,2), type = "none", display = "sites", xlab = "", ylab = "", cex = 0.5, xaxt = "n", yaxt = "n") #Create an empty plot
 plot(sigLoadings, col = 'grey20', labels = c("1", "2", "3", "4", "5", "6", "7")) #Plot loadings that simper determined were significant
@@ -232,14 +215,12 @@ box(col = "grey80")
 #### NMDS BY REGION ####
 #I'm going to take my averaged normalized data and plot it by region (Puget Sound vs. Willapa Bay).
 
-#jpeg(filename = "2017-10-10-Troubleshooting/2017-11-05-Integrated-Dataset/2017-11-28-NMDS-Analysis-Averaged-by-Region.jpeg", width = 1000, height = 750)
 fig.nmds.2 <- ordiplot(proc.nmds.averaged.euclidean, choices=c(1,2), type = "none", display = "sites", xlab = "Axis 1", ylab = "Axis 2", cex = 0.5) #Save NMDS as a new object
 points(fig.nmds.2, "sites", pch = NMDSColorShapeCustomization$Region.Shape) #Add points
 #legend("topleft", bty = "n", legend = paste("R = 0.2368", "Significance = 0.031"), cex = 0.8) #Add R and p-value from ANOSIM
 legend("topright", pch = c(20, 8), legend=c("Puget Sound", "Willapa Bay"), cex = 0.8)
 #vec.proc.nmds.averaged.euclidean <- envfit(ord = proc.nmds.averaged.euclidean$points, env = area4.t, perm = 1000, na.rm = TRUE) #Calculate loadings
 #plot(vec.proc.nmds.averaged.euclidean, p.max = 0.001, col= "blue", cex = 0.3, lty = 2) #Plot eigenvectors
-#dev.off()
 
 #### GLOBAL ANOSIM ####
 
